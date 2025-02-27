@@ -1,5 +1,6 @@
 package com.br.demo.service;
 
+import com.br.demo.dto.request.ProdutoRequestDTO;
 import com.br.demo.dto.response.ProdutoResponseDTO;
 import com.br.demo.model.Produto;
 import com.br.demo.repository.ProdutoRepository;
@@ -19,7 +20,29 @@ public class ProdutoService {
         return produtoRepository.findAll().stream()
                 .map(p -> new ProdutoResponseDTO(p.getId(), p.getNome(), p.getPreco()))
                 .collect(Collectors.toList());
-
     }
-    
+
+    public ProdutoResponseDTO buscarPorId(Long id){
+        Produto produto = produtoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Produto não encontrado"));
+        return new ProdutoResponseDTO(produto.getId(), produto.getNome(), produto.getPreco());
+    }
+    public ProdutoResponseDTO criarProduto(ProdutoRequestDTO produtoRequestDTO){
+        Produto novoProduto = new Produto(null, produtoRequestDTO.getNome(), produtoRequestDTO.getPreco(), produtoRequestDTO.getNumeroSerie());
+        Produto produtoSalvo = produtoRepository.save(novoProduto);
+        return new ProdutoResponseDTO(produtoSalvo.getId(), produtoSalvo.getNome(), produtoSalvo.getPreco());
+    }
+
+    public ProdutoResponseDTO atualizarProduto(Long id, ProdutoRequestDTO produtoRequestDTO){
+        Produto produtoExistente = produtoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Produto não encontrado"));
+        produtoExistente.setNome(produtoRequestDTO.getNome());
+        produtoExistente.setPreco(produtoRequestDTO.getPreco());
+        produtoExistente.setNumeroSerie(produtoRequestDTO.getNumeroSerie());
+        Produto produtoAtualizado = produtoRepository.update(produtoExistente);
+        return new ProdutoResponseDTO(produtoExistente.getId(), produtoExistente.getNome(), produtoExistente.getPreco());
+    }
+    public void excluirProduto(Long id){
+        produtoRepository.deleteById(id);
+    }
 }

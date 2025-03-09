@@ -10,7 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/produtos")
-public class ProdutoController {
+public class    ProdutoController {
 
     private final ProdutoService produtoService;
     public ProdutoController(ProdutoService produtoService) {
@@ -21,8 +21,8 @@ public class ProdutoController {
     public ResponseEntity<List<ProdutoResponseDTO>> listarProdutos(){
         return ResponseEntity.ok(produtoService.listarProdutos());
     }
-    @GetMapping("/{id}")
-    public ResponseEntity<ProdutoResponseDTO> buscarPorId(Long id){
+        @GetMapping("/{id}")
+    public ResponseEntity<ProdutoResponseDTO> buscarPorId(@PathVariable Long id){
         return ResponseEntity.ok(produtoService.buscarPorId(id));
     }
     @PostMapping
@@ -30,7 +30,7 @@ public class ProdutoController {
         return ResponseEntity.ok(produtoService.criarProduto(produtoRequestDTO));
     }
 
-    @PutMapping("/{id}")
+        @PutMapping("/{id}")
     public ResponseEntity<ProdutoResponseDTO> atualizarProduto(@PathVariable Long id, @RequestBody ProdutoRequestDTO produtoRequestDTO){
         return ResponseEntity.ok(produtoService.atualizarProduto(id, produtoRequestDTO));
     }
